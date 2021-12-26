@@ -2,12 +2,15 @@ const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
 const handlebars = require('express-handlebars');
+const route = require('./routes/index');
 const app = express()
-
 
 app.use(express.static(path.join(__dirname, 'public')));
 // HTTP Logger
 app.use(morgan('combined'))
+
+app.use(express.urlencoded());
+app.use(express.json());
 
 // Template Engine
 app.engine('hbs', handlebars.engine({
@@ -16,11 +19,7 @@ app.engine('hbs', handlebars.engine({
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'resources', 'views'));
 
-app.get('/', (req, res) => {
-    res.render('home');
-});
-app.get('/news', (req, res) => {
-  res.render('news');
-});
- 
+// Routes Init
+route(app);
+
 app.listen(3000)
