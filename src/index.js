@@ -4,6 +4,10 @@ const path = require('path');
 const handlebars = require('express-handlebars');
 const route = require('./routes/index');
 const app = express()
+const db = require('./config/db');
+
+// Connect to DB
+db.connect();
 
 app.use(express.static(path.join(__dirname, 'public')));
 // HTTP Logger
