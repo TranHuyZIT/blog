@@ -4,7 +4,7 @@ const path = require('path');
 const handlebars = require('express-handlebars');
 const route = require('./routes/index');
 const app = express()
-const db = require('./config/db');
+const db = require('./config/db/index');
 
 // Connect to DB
 db.connect();
