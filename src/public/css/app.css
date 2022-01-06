@@ -1,5 +1,11 @@
 .test {
-  font-size: 3.5rem; }
+  font-size: 3.5rem;
+}
 
 h1 {
-  color: green; }
+  color: green;
+}
+
+.card {
+  margin-bottom: 20px;
+}
