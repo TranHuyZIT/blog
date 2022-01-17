@@ -1,7 +1,7 @@
 <div class="mt-4">
     <div>
-      <h3>Khóa Học Của Tôi</h3>
-      <a href="/me/trash/courses">Thùng Rác</a>
+      <h3>Khóa Học Đã Xóa</h3>
+      <a href="/me/stored/courses">Danh Sách Khóa Học</a>
     </div>
     <table class="table mt-4">
         <thead>
@@ -22,17 +22,16 @@
                 <td>{{this.videoId}}</td>
                 <td>{{this.description}}</td>
                 <td>
-                    <a href= '/courses/{{this._id}}/edit' class="btn btn-link">Sửa</a>
+                    <a data-id="{{this._id}}" class="btn btn-link btn-restore">Khôi Phục</a>
                 </td>
                 <td>
-                    <a href= '' data-bs-toggle="modal" data-id="{{this._id}}" data-bs-target="#confirmDelete" class="btn btn-link">Xóa</a>
+                    <a href= '' data-bs-toggle="modal" data-id="{{this._id}}" data-bs-target="#confirmDelete" class="btn btn-link">Xóa Vĩnh Viễn </a>
                 </td>
             </tr>
             {{else}}
               <tr>
                 <td colspan="5" class="text-center">
-                    Bạn chưa đăng khóa học nào.
-                    <a class="btn btn-primary" href="/courses/create">Đăng Khóa Học</a>
+                    Thùng Rác Trống
                 </td>
               </tr>
             {{/each}}
@@ -40,7 +39,8 @@
         </table>
 </div>
 
-<!-- Confirm Delete -->
+
+<!-- Confirm Force Delete -->
 <div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="confirmDeleteLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -59,21 +59,34 @@
   </div>
 </div>
 
+<form action="" method="post" name="restore-course-form"></form>
 <form method="post" name="deleteCourse"></form>
-
 <script>
-    var confirmDelModal = document.getElementById('confirmDelete')
-    var id;
-    confirmDelModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        var button = event.relatedTarget
-        // Extract info from data-bs-* attributes
-        id = button.getAttribute('data-id')
-    })
-    var delCourseBtn = document.querySelector('#delCourseBtn');
+    document.addEventListener('DOMContentLoaded', function(){
+        // Restore
+        var restoreBtns = $('.btn-restore')
+        var restoreForm = document.forms['restore-course-form'];
+        var courseID;
+        restoreBtns.click(function(e){
+            courseID = $(this).data('id');
+            restoreForm.action = '/courses/' + courseID + '/restore?_method=PATCH';
+            restoreForm.submit();
+        });
+
+        // Force Delete
+        var confirmDelModal = document.getElementById('confirmDelete');
+        var id;
+        confirmDelModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            var button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            id = button.getAttribute('data-id')
+        })
+        var delCourseBtn = document.querySelector('#delCourseBtn');
         delCourseBtn.onclick = function(){
             var deleteForm = document.forms['deleteCourse'];
-            deleteForm.action = `/courses/${id}?_method=DELETE`;
+            deleteForm.action = `/courses/${id}/force?_method=DELETE`;
             deleteForm.submit();
         }
+    })
 </script>
