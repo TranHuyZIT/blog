@@ -9,3 +9,7 @@ h1 {
 .card {
   margin-bottom: 20px;
 }
+.checkbox-select-all-options {
+  margin: 0 10px;
+  width: 160px;
+}

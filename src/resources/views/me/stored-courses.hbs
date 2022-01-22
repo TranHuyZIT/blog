@@ -1,7 +1,20 @@
 <div class="mt-4">
     <div>
       <h3>Khóa Học Của Tôi</h3>
-      <a href="/me/trash/courses">Thùng Rác</a>
+      <a href="/me/trash/courses">Thùng Rác ({{this.deletedCount}})</a>
+      <div class="mt-4 d-flex align-items-center">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+            <label class="form-check-label" for="checkbox-all">
+              Chọn Tất Cả
+            </label>
+          </div>
+          <select class="form-control form-control-sm checkbox-select-all-options" id="">
+            <option value="">--Chọn Hành Động--</option>
+            <option value="delete">Xóa</option>
+          </select>
+          <button class="btn btn-primary btn-sm disabled">Thực Hiện</button>
+      </div>
     </div>
     <table class="table mt-4">
         <thead>
@@ -12,11 +25,17 @@
                 <th scope="col">Mô Tả</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {{#each courses}}
             <tr>
+                <td>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="courseIds[]" value="{{this._id}}">
+                  </div>
+                </td>
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.videoId}}</td>
@@ -64,16 +83,34 @@
 <script>
     var confirmDelModal = document.getElementById('confirmDelete')
     var id;
+    // Click on delete and show modal
     confirmDelModal.addEventListener('show.bs.modal', function (event) {
         // Button that triggered the modal
         var button = event.relatedTarget
         // Extract info from data-bs-* attributes
         id = button.getAttribute('data-id')
     })
+
+    // Click on confirm delete button on modal
     var delCourseBtn = document.querySelector('#delCourseBtn');
         delCourseBtn.onclick = function(){
             var deleteForm = document.forms['deleteCourse'];
             deleteForm.action = `/courses/${id}?_method=DELETE`;
             deleteForm.submit();
         }
+
+    // Check All
+    var checkboxAll = $('#checkbox-all');
+    var courseItemCheckBox = $('input[name="courseIds[]"]');
+    
+    checkboxAll.change(function (){
+      var isCheckedAll = $(this).prop('checked');
+      courseItemCheckBox.prop('checked', isCheckedAll);
+    })
+    courseItemCheckBox.change(function(){
+      var isCheckedAll = courseItemCheckBox.length === $('input[name="courseIds[]"]:checked').length;
+      console.log(isCheckedAll);
+      checkboxAll.prop('checked', isCheckedAll);
+
+    })
 </script>
