@@ -3,27 +3,19 @@ const Course = require('../models/Courses');
 class MeController{
     // GET /search
     storedCourses(req, res, next){
-
-        Promise.all([Course.find({}).lean(), Course.countDocumentsDeleted().lean()])
+        let courseQuery = Course.find({});
+        if (req.query.hasOwnProperty('_sort')){
+            courseQuery = courseQuery.sort({
+                [req.query.column] : [req.query.type]
+            })
+        }
+        Promise.all([courseQuery.lean(), Course.countDocumentsDeleted().lean()])
             .then(([courses, deletedCount]) => {
                 res.render('me/stored-courses', {
                     deletedCount,
                     courses: courses
                 })
             })
-
-        // Course.countDocumentsDeleted().lean()
-        //     .then((deletedCount) => {
-        //         console.log(deletedCount);
-        //     })
-        //     .catch(next);
-
-        // Course.find({}).lean()
-        //     .then(courses => res.render('me/stored-courses', {
-        //         courses: courses
-        //     }))
-        //     .catch(next);
-        
     }
 
     //[GET] /trash-courses

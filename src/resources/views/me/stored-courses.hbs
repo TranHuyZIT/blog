@@ -16,12 +16,19 @@
           <button class="btn btn-primary btn-sm checkbox-submit disabled">Thực Hiện</button>
       </div>
     </div>
+
     <table class="table mt-4">
         <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Tên Khóa Học</th>
-                <th scope="col">Trình Độ</th>
+                <th scope="col" colspan="2">#</th>
+                <th scope="col">
+                  Tên Khóa Học
+                  {{{sortable 'name' _sort}}}
+                  
+                </th>
+                <th scope="col">Video ID
+                  {{{sortable 'videoId' _sort}}}
+                </th>
                 <th scope="col">Mô Tả</th>
                 <th></th>
                 <th></th>
